@@ -14,11 +14,11 @@ print("*                              *")
 print("********************************")
 
 # Open a connection with ldap server
-# hostname = raw_input("ldap sunucu ip adresini giriniz: ")
-# search_base = raw_input("ldap search_base bilgisini giriniz(örn: dc=tuncay,dc=colak): ")
+hostname = raw_input("ldap sunucu ip adresini giriniz: ")
+search_base = raw_input("ldap search_base bilgisini giriniz(örn: dc=tuncay,dc=colak): ")
 pwd = raw_input("ldap admin parolası: ")
-hostname="192.168.56.102"
-search_base = "dc=tuncay,dc=colak"
+# hostname="192.168.56.102"
+# search_base = "dc=tuncay,dc=colak"
 base_dn = "cn=admin,"+str(search_base)
 ldap_obj = ldap.open(hostname)
 ldap_obj.simple_bind_s(base_dn, pwd)
