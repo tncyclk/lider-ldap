@@ -48,7 +48,7 @@ for user in range(1,int(userNum)):
     print (str(uid_num))
     attrs = {}
     attrs['objectclass'] = ['top', 'posixAccount', 'shadowAccount', 'organizationalPerson', 'inetOrgPerson', 'pardusAccount', 'pardusLider', 'person']
-    # objectClass can be added
+    # objectClass can be added object class'lar arttırılabilir.
     attrs['cn'] = 'user'+str(user)
     attrs['sn'] = 'user'+str(user)
     attrs['uid'] = 'user'+str(user)
