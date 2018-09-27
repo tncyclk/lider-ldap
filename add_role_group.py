@@ -17,10 +17,10 @@ ou=Roles grubu altÄ±nda TT role'lerini bul (TT-Ankara) --->> Bu role ait kullanÄ
 
 class RoleGroup(object):
     def __init__(self):
-        self.server = '192.168.56.111'
-        self.base_dn = 'dc=liderahenk,dc=org'
+        self.server = 'ldap_server_ip'
+        self.base_dn = 'ldap_base_dn(dc=liderahenk,dc=org)'
         self.user_dn = 'cn=admin,'+str(self.base_dn)
-        self.user_password = '1'
+        self.user_password = 'ldap_admin_password'
         self.l_obj = None
 
     def ldap_bind(self):
