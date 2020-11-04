@@ -2,7 +2,7 @@
 * users dosyasında bulunan kullanıcıların OpenLDAP'a aktarılması amaçlanmaktadır. users dosyası,
 
 
-        uid	        cn	sn	ou	                                        mail
+        uid	cn	sn	ou	                                        mail
         user1	user1	USER1	Bilgi İşlem Daire,Sistem Şube,Lider sistem	user1@liderahenk.org
 
 
@@ -17,4 +17,4 @@ ou parametresi örnekte gösterildiği şekliyle "," ile hiyararşinin yukarınd
         self.pwd = "secret"
         self.ldap_server = "192.168.*.*"
         
-* **python3 user_migration.py**  kodu ile çalıştırılır.
+* **python3 user_migration.py**  komutu ile çalıştırılır.
