@@ -1,4 +1,27 @@
 # Liderahenk OpenLDAP Kullanıcı Entegrasyonu
+
+## Uygulamanın İndirilmesi
+
+````
+sudo apt-get install git
+````
+
+komutu ile git paketi yüklenir.
+
+````
+git clone  https://github.com/tncyclk/lider-ldap.git
+````
+## Bağımlılıkların Kurulması
+
+Uçbirimde aşağıdaki komutlar sırasıyla yazılır.
+
+````
+sudo apt-get install python3-pip
+pip3 install ezodf lxml ldap3
+ 
+````
+
+## Uygulamanın Çalıştırılması
 * users dosyasında bulunan kullanıcıların OpenLDAP'a aktarılması amaçlanmaktadır. users dosyası,
 
 
