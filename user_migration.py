@@ -13,10 +13,10 @@ class Migration(object):
     """docstring for RosterItem"""
     def __init__(self):
         super(Migration, self).__init__()
-        self.base_dn = "dc=liderahenk,dc=org"
+        self.base_dn = "dc=example,dc=com"
         self.ldap_admin_dn = "cn=admin,"+str(self.base_dn)
-        self.pwd = "1"
-        self.ldap_server = "192.168.56.1"
+        self.pwd = "secret"
+        self.ldap_server = "192.168.*.*"
         self.l_obj = None
 
         self.user_list_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'users.ods')
