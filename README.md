@@ -31,7 +31,7 @@ lider-ldap dizini altında yer alan;
 
 
 şeklinde düzenlenmelidir. Burada yer alan ou parametresi kullanıcının **ou=Users** altında bulunacağı hiyerarşiyi ifade etmektedir. 
-ou parametresi örnekte gösterildiği şekliyle "," ile hiyararşinin yukarından aşağı olacak şekilde ayrılarak yazılmalıdır.
+ou parametresi örnekte gösterildiği şekliyle "," ile kullanıcı hiyerarşisinin yukarından aşağı olacak şekilde ayrılarak yazılmalıdır.
 * user_migration.py dosyasında yer alan aşağıdaki değişkenlerin varolan OpenLDAP erişim bilgilerine göre düzenlenmelidir.
  
 
