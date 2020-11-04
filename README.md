@@ -35,7 +35,7 @@ ou parametresi örnekte gösterildiği şekliyle "," ile hiyararşinin yukarınd
  
 
 
-        self.base_dn = "dc=examle,dc=com"
+        self.base_dn = "dc=example,dc=com"
         self.ldap_admin_dn = "cn=admin,"+str(self.base_dn)
         self.pwd = "secret"
         self.ldap_server = "192.168.*.*"
