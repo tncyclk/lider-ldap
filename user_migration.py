@@ -22,15 +22,18 @@ class Migration(object):
         self.user_list_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'users.ods')
 
     def ldap_bind(self):
-        # define the server
-        s = Server(self.ldap_server, get_info=ALL)  # define an unsecure LDAP server, requesting info on DSE and schema
-        # define the connection
-        self.l_obj = Connection(s, user=self.ldap_admin_dn, password=self.pwd, auto_bind=True)
-        # perform the Bind operation
-        if not self.l_obj.bind():
-            print('error in bind', self.l_obj.result)
-        else:
-            print("\nSusccessful connect to OpenLDAP\n")
+        try:
+            s = Server(self.ldap_server, get_info=ALL)
+            self.l_obj = Connection(s, user=self.ldap_admin_dn, password=self.pwd, auto_bind=True)
+            if not self.l_obj.bind():
+                print('error in bind', self.l_obj.result)
+                return False
+            else:
+                print("\nSusccessful connect to OpenLDAP\n")
+                return True
+        except Exception as e:
+            print(e)
+            return False
 
     def ldap_unbind(self):
         self.l_obj.unbind()
@@ -59,56 +62,58 @@ class Migration(object):
             return False
 
     def import_user(self):
-        self.ldap_bind()
-        ezodf.config.set_table_expand_strategy('all')
-        doc = ezodf.opendoc(self.user_list_path)
-        sheet = doc.sheets[0]
+        if self.ldap_bind() is True:
+            ezodf.config.set_table_expand_strategy('all')
+            doc = ezodf.opendoc(self.user_list_path)
+            sheet = doc.sheets[0]
 
-        print("Spreadsheet contains %d sheet(s)." % len(doc.sheets))
-        for sheet in doc.sheets:
-            print("-" * 40)
-            print("   Sheet name : '%s'" % sheet.name)
-            print("Size of Sheet : (rows=%d, cols=%d)" % (sheet.nrows(), sheet.ncols()))
+            print("Spreadsheet contains %d sheet(s)." % len(doc.sheets))
+            for sheet in doc.sheets:
+                print("-" * 40)
+                print("   Sheet name : '%s'" % sheet.name)
+                print("Size of Sheet : (rows=%d, cols=%d)" % (sheet.nrows(), sheet.ncols()))
 
-        user_size = sheet.nrows() + 1
-        for i in range(2, user_size):
-            uid_number = randint(6000, 50000)
-            while True:
-                if self.ldap_search_by_uid_number(uid_number):
-                   uid_number = randint(6000, 50000)
-                else:
-                    break
+            user_size = sheet.nrows() + 1
+            for i in range(2, user_size):
+                uid_number = randint(6000, 50000)
+                while True:
+                    if self.ldap_search_by_uid_number(uid_number):
+                       uid_number = randint(6000, 50000)
+                    else:
+                        break
 
-            user_data = {
-                'uid': sheet['A{}'.format(i)].value,
-                'cn': sheet['B{}'.format(i)].value,
-                'sn': sheet['C{}'.format(i)].value,
-                'ou': sheet['D{}'.format(i)].value,
-                # 'uidNumber': sheet['D{}'.format(i)].value,
-                'uidNumber': uid_number,
-                # 'gidNumber': sheet['E{}'.format(i)].value,
-                'gidNumber': 7500,
-                'userPassword': sheet['A{}'.format(i)].value,
-                'mail': sheet['E{}'.format(i)].value
-            }
-            uid = str(user_data['uid'])
-            ou = user_data['ou']
-            ou_parser = ou.split(",")
-            ou = "ou={0},ou=Users,{1}".format(ou_parser[0], self.base_dn)
-            if self.ldap_search_by_dn(ou) is False:
-                self.add_ou(ou)
-            ou_size = len(ou_parser)-1
-            for x in range(ou_size):
-                x = x+1
-                ou = "ou={0},{1}".format(ou_parser[x], ou)
+                user_data = {
+                    'uid': sheet['A{}'.format(i)].value,
+                    'cn': sheet['B{}'.format(i)].value,
+                    'sn': sheet['C{}'.format(i)].value,
+                    'ou': sheet['D{}'.format(i)].value,
+                    # 'uidNumber': sheet['D{}'.format(i)].value,
+                    'uidNumber': uid_number,
+                    # 'gidNumber': sheet['E{}'.format(i)].value,
+                    'gidNumber': 7500,
+                    'userPassword': sheet['A{}'.format(i)].value,
+                    'mail': sheet['E{}'.format(i)].value
+                }
+                uid = str(user_data['uid'])
+                ou = user_data['ou']
+                ou_parser = ou.split(",")
+                ou = "ou={0},ou=Users,{1}".format(ou_parser[0], self.base_dn)
                 if self.ldap_search_by_dn(ou) is False:
                     self.add_ou(ou)
+                ou_size = len(ou_parser)-1
+                for x in range(ou_size):
+                    x = x+1
+                    ou = "ou={0},{1}".format(ou_parser[x], ou)
+                    if self.ldap_search_by_dn(ou) is False:
+                        self.add_ou(ou)
 
-            user_dn = "uid={0},{1}".format(uid, ou)
-            if self.ldap_search_by_dn(user_dn) is False:
-                self.add_user(user_data, user_dn)
+                user_dn = "uid={0},{1}".format(uid, ou)
+                if self.ldap_search_by_dn(user_dn) is False:
+                    self.add_user(user_data, user_dn)
 
-        self.ldap_unbind()
+            self.ldap_unbind()
+        else:
+            print("Error connecting to ldap. users will not be added to LDAP")
 
     def add_ou(self, ou):
         try:
