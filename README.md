@@ -22,7 +22,7 @@ pip3 install ezodf lxml ldap3
 ````
 
 ## Uygulamanın Çalıştırılması
-lider-ldap dizini altında yer alan;
+lider-ldap dizini içinde yer alan;
 * users dosyasında bulunan kullanıcıların OpenLDAP'a aktarılması amaçlanmaktadır. users dosyası,
 
 
